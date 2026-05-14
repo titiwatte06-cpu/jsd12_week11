@@ -1,0 +1,18 @@
+POST http://localhost:3002/users
+Content-Type: application/json
+
+{
+    "username":"james",
+    "email":"james@gmail.com",
+    "password":"456213"
+
+}
+
+###Create put
+PUT http://localhost:3002/users/2
+Content-Type: application/json
+
+{
+  "username": "Taychit",
+  "email": "new@gmail.com"
+}

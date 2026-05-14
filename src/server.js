@@ -1,7 +1,14 @@
 import express from "express";
+import cors from "cors"
+
 import { users } from "./fakeData/fakeUsers.js";
 
+
 const app = express();
+
+app.use(cors());    //middleware 1
+
+app.use(express.json());   //middleware2
 
 app.get("/",(req,res) => {
     res.send(`<!doctype html>
@@ -40,6 +47,65 @@ app.get("/users",(req,res) => {
     res.json(users);
 
 });
+
+app.post("/users",(req,res) => {
+  const { username, email , password} = req.body || {}
+// || {} ป้องกัน crash ถ้า body เป็น undefined
+
+// บรรทัด 52-54 — validate ก่อน ถ้าไม่มีค่าส่ง error กลับ
+if (!username || !email) {
+  return res.status(400).json({ error: "username and email are required" })
+}
+
+// บรรทัด 57-59 — หา id ใหม่ด้วย reduce
+const nextId = String(
+  (users.reduce((max, u) => Math.max(max, Number(u.id)), 0) || 0) + 1
+)
+// วนหา id สูงสุดใน array แล้ว +1
+// เช่น users มี id 1,2,3 → nextId = "4"
+
+// บรรทัด 61 — สร้าง object user ใหม่
+const newUser = { id: nextId, username, email , password }
+
+// บรรทัด 63 — เพิ่มเข้า array (mock database)
+users.push(newUser)
+
+// บรรทัด 65 — ส่ง user ที่สร้างกลับไป + status 201
+return res.status(201).json(users)
+
+});
+
+app.put('/users/:id', (req, res) => {
+
+  const user = users.find(u => u.id === req.params.id)
+  
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' })
+  }
+
+  const {username ,email,password} = req.body;
+
+  if(!username || !email || !password){
+    return res
+    .status(400)
+    .json({error:"username, email and password are required!"});
+  }
+
+  user.username = username;
+  user.email = email;
+  user.password = password;
+
+  res.status(200).json(users);
+})
+
+app.post("/add", (req, res) => {
+    const newUser = req.body  
+    users.push(newUser)       
+    res.json({ message: "done", user: newUser })
+})
+
+
+
 
 const PORT = 3002;
 

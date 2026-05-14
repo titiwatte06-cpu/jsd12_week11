@@ -1,0 +1,22 @@
+GET http://localhost:3002/api/users
+
+### create post
+POST http://localhost:3002/api/users
+Content-Type: application/json
+
+{
+    "username":"james",
+    "email":"james@gmail.com",
+    "password":"456213"
+
+}
+
+###Create put
+PUT http://localhost:3002/api/users/2
+Content-Type: application/json
+
+{
+  "username": "Taychit",
+  "email": "new@gmail.com",
+  "password":"234556"
+}

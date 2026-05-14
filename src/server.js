@@ -1,7 +1,14 @@
 import express from "express";
+import cors from "cors"
+
 import { users } from "./fakeData/fakeUsers.js";
+import {router as apiRoutes} from "./route/v1/index.js";
 
 const app = express();
+
+app.use(cors());    //middleware 1
+
+app.use(express.json());   //middleware2
 
 app.get("/",(req,res) => {
     res.send(`<!doctype html>
@@ -36,10 +43,10 @@ app.get("/",(req,res) => {
   </html>`)
 })
 
-app.get("/users",(req,res) => {
-    res.json(users);
+app.use("/api", apiRoutes);
 
-});
+
+
 
 const PORT = 3002;
 

@@ -1,17 +1,21 @@
 import express from "express";
-import cors from "cors"
+import cors from "cors";
 
 import { users } from "./fakeData/fakeUsers.js";
-import {router as apiRoutes} from "./route/v1/index.js";
+import { router as apiRoutes } from "./routes/index.js";
+import { connectDB } from "./config/mongodb.js";
+import { connectSupabase } from "./config/supabase.js";
 
 const app = express();
 
-app.use(cors());    //middleware 1
+app.use(cors());
 
-app.use(express.json());   //middleware2
+app.use(express.json());
 
-app.get("/",(req,res) => {
-    res.send(`<!doctype html>
+app.use("/api", apiRoutes);
+
+app.get("/", (req, res) => {
+  res.send(`<!doctype html>
   <html lang="en">
     <head>
       <meta charset="utf-8" />
@@ -40,16 +44,14 @@ app.get("/",(req,res) => {
         </footer>
       </main>
     </body>
-  </html>`)
-})
-
-app.use("/api", apiRoutes);
-
-
-
+  </html>`);
+});
 
 const PORT = 3002;
 
-app.listen(PORT,() => {
-    console.log(`Server running on PORT:${PORT}`);
+await connectDB();
+await connectSupabase();
+
+app.listen(PORT, () => {
+  console.log(`Server running on PORT: ${PORT} 🟢`);
 });

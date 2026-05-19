@@ -1,0 +1,14 @@
+GET http://localhost:3002/api/v2/users
+
+###
+
+POST http://localhost:3002/api/v2/users
+Content-Type: application/json
+
+{
+    "username":"tomking3",
+    "role":"admin",
+    "email":"tommyking306@gmail.com",
+    "password":"45621113"
+
+}
